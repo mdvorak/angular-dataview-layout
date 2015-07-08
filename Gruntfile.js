@@ -13,7 +13,9 @@ module.exports = function (grunt) {
             docs: 'docs',
             bower: 'bower_components',
 
-            angular: require('./bower_components/angular/.bower.json').version
+            angular: require('./bower_components/angular/.bower.json').version,
+            module: 'dataviewLayoutModule',
+            year: new Date().getUTCFullYear()
         },
         clean: {
             build: ['<%=cfg.build%>'],
@@ -107,13 +109,13 @@ module.exports = function (grunt) {
         // Compile
         concat: {
             options: {
-                banner: '/**\n * @license <%=pkg.name%> v<%=pkg.version%>\n * (c) 2015 Michal Dvorak https://github.com/mdvorak/<%=pkg.name%>\n * License: <%=pkg.license%>\n */'
+                banner: '/**\n * @license <%=pkg.name%> v<%=pkg.version%>\n * (c) <%=cfg.year%> <%=pkg.author%> <%=pkg.homepage%>\n * License: <%=pkg.license%>\n */'
             },
             module: {
                 options: {
                     get banner() {
                         var module = grunt.file.read('src/module.js');
-                        return '<%=concat.options.banner%>\n(function mdvViewLayoutModule(angular) {\n' + module + '\n';
+                        return '<%=concat.options.banner%>\n(function <%=cfg.module%>(angular) {\n' + module + '\n';
                     },
                     footer: '\n})(angular);',
                     process: function (src) {
@@ -155,7 +157,7 @@ module.exports = function (grunt) {
         uglify: {
             build: {
                 options: {
-                    banner: '/*\n <%=pkg.name%> v<%=pkg.version%>\n (c) 2015 Michal Dvorak https://github.com/mdvorak/<%=pkg.name%>\n License: <%=pkg.license%>\n*/',
+                    banner: '/*\n <%=pkg.name%> v<%=pkg.version%>\n (c) <%=cfg.year%> <%=pkg.author%> <%=pkg.homepage%>\n License: <%=pkg.license%>\n*/',
                     sourceMap: true
                 },
                 files: [{

@@ -1,9 +1,10 @@
 {
-  "name": "angular-view-layout",
+  "name": "angular-dataview-layout",
   "version": "0.0.1",
-  "homepage": "https://github.com/mdvorak/angular-view-layout",
+  "homepage": "https://github.com/mdvorak/angular-dataview-layout",
   "private": true,
   "license": "MIT",
+  "author": "Michal Dvorak",
   "devDependencies": {
     "bower": "1.4.1",
     "grunt": "0.4.5",

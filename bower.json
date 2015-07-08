@@ -1,14 +1,14 @@
 {
-  "name": "angular-view-layout",
-  "homepage": "https://mdvorak.github.io/angular-view-layout",
-  "repository": "git@github.com:mdvorak/angular-view-layout.git",
+  "name": "angular-dataview-layout",
+  "homepage": "https://mdvorak.github.io/angular-dataview-layout",
+  "repository": "git@github.com:mdvorak/angular-dataview-layout.git",
   "authors": [
     "Michal Dvořák <mikee@mdvorak.org>"
   ],
   "license": "MIT",
   "main": [
-    "dist/angular-view-layout.min.js",
-    "dist/angular-view-layout.min.js.map"
+    "dist/angular-dataview-layout.min.js",
+    "dist/angular-dataview-layout.min.js.map"
   ],
   "ignore": [
     "package.json",

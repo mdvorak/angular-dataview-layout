@@ -1,21 +1,21 @@
 /**
- * @license angular-view-layout v0.0.1
- * (c) 2015 Michal Dvorak https://github.com/mdvorak/angular-view-layout
+ * @license angular-dataview-layout v0.0.1
+ * (c) 2015 Michal Dvorak https://github.com/mdvorak/angular-dataview-layout
  * License: MIT
  */
-(function mdvViewLayoutModule(angular) {
+(function dataviewLayoutModule(angular) {
     "use strict";
 
     /**
      * @ngdoc overview
-     * @name mdvorakViewLayout
+     * @name mdvorakDataviewLayout
      *
      * @description
      * Angular View Layout module.
      */
-    var module = angular.module("mdvorakViewLayout", []);
+    var module = angular.module("mdvorakDataviewLayout", []);
 
-    module.provider('mdvViewLayout', function mdvViewLayoutProvider() {
+    module.provider('dataviewLayout', function dataviewLayoutProvider() {
         var provider = this;
 
         provider.groups = {};
@@ -33,7 +33,7 @@
             provider.groups[group] = config;
         };
 
-        this.$get = ["$sce", "$templateRequest", "$compile", function mdvViewLayoutFactory($sce, $templateRequest, $compile) {
+        this.$get = ["$sce", "$templateRequest", "$compile", function dataviewLayoutFactory($sce, $templateRequest, $compile) {
             var groups = {};
 
             // Build lazy-download-compile templates factory
@@ -41,7 +41,7 @@
                 var groupMap = groups[group] = {};
 
                 // Process all group keys
-                angular.forEach(config, function (templateCfg, viewType) {
+                angular.forEach(config, function(templateCfg, viewType) {
                     var type = groupMap[viewType] = {};
 
                     type.link = function linkStub(scope, cloneFn, options) {
@@ -51,17 +51,17 @@
                             type.link(scope, cloneFn, options);
                         } else if (templateCfg.$$templatePromise) {
                             // This is intermediate state
-                            templateCfg.$$templatePromise.then(function (linkFn) {
+                            templateCfg.$$templatePromise.then(function(linkFn) {
                                 linkFn(scope, cloneFn, options);
                             });
                         } else if (templateCfg.templateUrl) {
                             // Load template asynchronously
-                            templateCfg.$$templatePromise = $templateRequest($sce.getTrustedResourceUrl(templateCfg.templateUrl)).then(function (template) {
+                            templateCfg.$$templatePromise = $templateRequest($sce.getTrustedResourceUrl(templateCfg.templateUrl)).then(function(template) {
                                 return (type.link = $compile(template));
                             });
 
                             // Link
-                            templateCfg.$$templatePromise.then(function (linkFn) {
+                            templateCfg.$$templatePromise.then(function(linkFn) {
                                 linkFn(scope, cloneFn, options);
                             });
                         } else {
@@ -81,13 +81,13 @@
         }];
     });
 
-    module.directive('mdvViewLayout', ["$compile", "mdvViewLayout", function mdvViewLayoutDirective($compile, mdvViewLayout) {
+    module.directive('dataviewLayout', ["$compile", "dataviewLayout", function dataviewLayoutDirective($compile, dataviewLayout) {
         return {
             restrict: 'EAC',
             transclude: true,
-            link: function mdvViewLayoutLink(scope, element, attrs, ctrl, $transclude) {
+            link: function dataviewLayoutLink(scope, element, attrs, ctrl, $transclude) {
                 var newScope = scope.$new();
-                var template = mdvViewLayout.$$template(attrs.type, scope.$viewType);
+                var template = dataviewLayout.$$template(attrs.type, scope.$viewType);
 
                 if (template) {
                     // Link, let transclude directive handle it

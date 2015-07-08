@@ -1,6 +1,6 @@
 "use strict";
 
-module.provider('mdvViewLayout', function mdvViewLayoutProvider() {
+module.provider('dataviewLayout', function dataviewLayoutProvider() {
     var provider = this;
 
     provider.groups = {};
@@ -18,7 +18,7 @@ module.provider('mdvViewLayout', function mdvViewLayoutProvider() {
         provider.groups[group] = config;
     };
 
-    this.$get = function mdvViewLayoutFactory($sce, $templateRequest, $compile) {
+    this.$get = function dataviewLayoutFactory($sce, $templateRequest, $compile) {
         var groups = {};
 
         // Build lazy-download-compile templates factory
@@ -66,13 +66,13 @@ module.provider('mdvViewLayout', function mdvViewLayoutProvider() {
     };
 });
 
-module.directive('mdvViewLayout', function mdvViewLayoutDirective($compile, mdvViewLayout) {
+module.directive('dataviewLayout', function dataviewLayoutDirective($compile, dataviewLayout) {
     return {
         restrict: 'EAC',
         transclude: true,
-        link: function mdvViewLayoutLink(scope, element, attrs, ctrl, $transclude) {
+        link: function dataviewLayoutLink(scope, element, attrs, ctrl, $transclude) {
             var newScope = scope.$new();
-            var template = mdvViewLayout.$$template(attrs.type, scope.$viewType);
+            var template = dataviewLayout.$$template(attrs.type, scope.$viewType);
 
             if (template) {
                 // Link, let transclude directive handle it

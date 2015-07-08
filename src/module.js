@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc overview
- * @name mdvorakViewLayout
+ * @name mdvorakDataviewLayout
  *
  * @description
  * Angular View Layout module.
  */
-var module = angular.module("mdvorakViewLayout", []);
+var module = angular.module("mdvorakDataviewLayout", []);
