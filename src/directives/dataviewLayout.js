@@ -74,7 +74,7 @@ module.provider('dataviewLayout', function dataviewLayoutProvider() {
                 type.link = function linkStub(scope, cloneFn, options) {
                     if (templateCfg.template) {
                         // Compile directly
-                        type.link = groupMap[viewType] = $compile(templateCfg.template);
+                        type.link = $compile(templateCfg.template);
                         type.link(scope, cloneFn, options);
                     } else if (templateCfg.$$templatePromise) {
                         // This is intermediate state
@@ -112,10 +112,14 @@ module.provider('dataviewLayout', function dataviewLayoutProvider() {
          * Returns an object representing the given view. If group is not found and default view is not defined,
          * `undefined` is returned.
          */
-        groups.$template = function $template(group, viewType) {
-            var templates = groups[group] || groups.default;
-            return templates && (templates[viewType] || templates.default);
-        };
+        Object.defineProperty(groups, '$template', {
+            enumerable: false,
+            writable: false,
+            value: function $template(group, viewType) {
+                var templates = groups[group] || groups.default;
+                return templates && (templates[viewType] || templates.default);
+            }
+        });
 
         /**
          * @ngdoc property
@@ -153,24 +157,32 @@ module.directive('dataviewLayout', function dataviewLayoutDirective($compile, da
         restrict: 'EAC',
         transclude: true,
         link: function dataviewLayoutLink(scope, element, attrs, ctrl, $transclude) {
-            var newScope = scope.$new();
-            var template = dataviewLayout.$template(attrs.type, scope[dataviewLayout.$typeAttribute]);
+            var nestedScope;
 
-            if (template) {
-                // Link, let transclude directive handle it
-                template.link(newScope, function templateLink(clone) {
-                    element.empty();
-                    element.append(clone);
-                }, {
-                    parentBoundTranscludeFn: $transclude
-                });
-            } else {
-                // No template to be used, include content directly
-                $transclude(newScope, function transcludeLink(clone) {
-                    element.empty();
-                    element.append(clone);
-                });
-            }
+            scope.$watch(dataviewLayout.$typeAttribute, function typeWatcher(value) {
+                if (nestedScope) {
+                    nestedScope.$destroy();
+                }
+
+                nestedScope = scope.$new();
+                var template = dataviewLayout.$template(attrs.type, value);
+
+                if (template) {
+                    // Link, let transclude directive handle it
+                    template.link(nestedScope, function templateLink(clone) {
+                        element.empty();
+                        element.append(clone);
+                    }, {
+                        parentBoundTranscludeFn: $transclude
+                    });
+                } else {
+                    // No template to be used, include content directly
+                    $transclude(nestedScope, function transcludeLink(clone) {
+                        element.empty();
+                        element.append(clone);
+                    });
+                }
+            });
         }
     };
 });
