@@ -14,14 +14,14 @@ module.exports = function (grunt) {
             bower: 'bower_components',
 
             angular: require('./bower_components/angular/.bower.json').version,
-            module: 'dataviewLayoutModule',
+            module: 'dataRouterModule',
             year: new Date().getUTCFullYear()
         },
         clean: {
             build: ['<%=cfg.build%>'],
             dist: ['<%=cfg.dist%>', '<%=cfg.docs%>'],
             docs: ['<%=cfg.docs%>'],
-            tmp: ['<%=cfg.build%>/out.js']
+            tmp: ['<%=cfg.build%>/out.js', '<%=cfg.build%>/api.js']
         },
 
         // Validate
@@ -125,7 +125,29 @@ module.exports = function (grunt) {
                 files: [{
                     dest: '<%=cfg.build%>/out.js',
                     src: [
+                        '<%=cfg.src%>/dataRouterRegistry.js',
+                        '<%=cfg.src%>/dataRouterLoader.js',
+                        '<%=cfg.src%>/dataRouter.js',
+                        '<%=cfg.src%>/matchMap.js',
+                        '<%=cfg.src%>/eventSupport.js',
                         '<%=cfg.src%>/directives/**/*.js',
+                        '<%=cfg.src%>/dataApi.js',
+                        '!<%=cfg.src%>/**/*.spec.js'
+                    ]
+                }]
+            },
+            api: {
+                options: {
+                    banner: '<%=concat.options.banner%>\n(function dataApiModule(angular) {\n"use strict";\n',
+                    footer: '\n})(angular);',
+                    process: function (src) {
+                        return src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    }
+                },
+                files: [{
+                    dest: '<%=cfg.build%>/api.js',
+                    src: [
+                        '<%=cfg.src%>/dataApi.js',
                         '!<%=cfg.src%>/**/*.spec.js'
                     ]
                 }]
@@ -136,7 +158,8 @@ module.exports = function (grunt) {
             build: {
                 files: [
                     {
-                        '<%=cfg.build%>/dist/<%=pkg.name%>.js': '<%=cfg.build%>/out.js'
+                        '<%=cfg.build%>/dist/<%=pkg.name%>.js': '<%=cfg.build%>/out.js',
+                        '<%=cfg.build%>/dist/data-api.js': '<%=cfg.build%>/api.js'
                     }
                 ]
             }
@@ -148,8 +171,7 @@ module.exports = function (grunt) {
             },
             build: {
                 src: [
-                    '<%=cfg.build%>/dist/<%=pkg.name%>.js',
-                    '<%=cfg.build%>/dist/components/*.js'
+                    '<%=cfg.build%>/dist/**/*.js'
                 ]
             }
         },
@@ -238,12 +260,12 @@ module.exports = function (grunt) {
                     '<%=cfg.build%>/dist/angular-data-router.js'
                 ]
             },
-            api: {
+            build: {
                 src: [
                     '<%=cfg.build%>/dist/<%=pkg.name%>.js',
                     '<%=cfg.src%>/docs/**/*.js'
                 ],
-                title: '<%=pkg.name%> Documentation'
+                title: '<%=pkg.description%> Documentation'
             }
         },
         'gh-pages': {
@@ -275,7 +297,7 @@ module.exports = function (grunt) {
     });
 
     // Private tasks
-    grunt.registerTask('javascript', ['jshint:src', 'concat:module', 'ngAnnotate:build', 'jshint:bundle', 'jsbeautifier:build', 'uglify:build', 'clean:tmp']);
+    grunt.registerTask('javascript', ['jshint:src', 'concat:module', 'concat:api', 'ngAnnotate:build', 'jshint:bundle', 'jsbeautifier:build', 'uglify:build', 'clean:tmp']);
 
     // Public tasks
     grunt.registerTask('default', ['jshint:grunt', 'clean:build', 'javascript', 'jshint:test', 'karma:default']);
