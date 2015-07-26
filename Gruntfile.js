@@ -260,7 +260,7 @@ module.exports = function (grunt) {
                     '<%=cfg.build%>/dist/<%=pkg.name%>.js'
                 ]
             },
-            build: {
+            api: {
                 src: [
                     '<%=cfg.build%>/dist/<%=pkg.name%>.js',
                     '<%=cfg.src%>/docs/**/*.js'
@@ -302,7 +302,7 @@ module.exports = function (grunt) {
     // Public tasks
     grunt.registerTask('default', ['jshint:grunt', 'clean:build', 'javascript', 'jshint:test', 'karma:default']);
     grunt.registerTask('debug', ['karma:debug']);
-    grunt.registerTask('demo', ['jshint:demo', 'default', 'connect:server', 'watch']);
+    grunt.registerTask('demo', ['jshint:demo', 'clean:docs', 'default', 'ngdocs', 'connect:server', 'watch']);
 
     grunt.registerTask('docs', ['jshint:grunt', 'clean:build', 'clean:docs', 'javascript', 'ngdocs', 'gh-pages']);
     grunt.registerTask('dist', ['default', 'clean:dist', 'copy:dist']);

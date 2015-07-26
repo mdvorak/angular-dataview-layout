@@ -100,7 +100,7 @@ module.provider('dataviewLayout', function dataviewLayoutProvider() {
 
         /**
          * @ngdoc method
-         * @methodOf mdvorakDataviewLayout.dataviewLayoutProvider
+         * @methodOf mdvorakDataviewLayout.dataviewLayout
          * @name $template
          *
          * @param {string} group Name of the registered group. If empty or group does not exist, `default` is used.
